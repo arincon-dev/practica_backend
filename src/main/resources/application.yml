@@ -4,16 +4,16 @@ spring:
   application:
     name: usuarios
   datasource:
-    url: ${MYSQL_DATABASE_URL}
-    username: ${MYSQL_DATABASE_USER}
-    password: ${MYSQL_DATABASE_PWD}
+    url: jdbc:mysql://localhost:3306/practica_final_backend
+    username: root
+    password: admin
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: true
     properties:
       hibernate:
-        format_sql: true
+        '[format_sql]': true
   flyway:
     enabled: true
     locations: classpath:db/migration
