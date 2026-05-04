@@ -48,3 +48,6 @@ node_modules
 # Local personal notes (do not commit)
 /notes/local-study-guide.md
 /notes/private/
+
+# Copilot instruction files
+/.github/instructions/

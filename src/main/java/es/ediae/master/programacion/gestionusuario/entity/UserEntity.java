@@ -20,6 +20,9 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name= "is_admin", nullable=false)
+    private Boolean isAdmin;
+
     @Column(nullable=false)
     private String username;
 
@@ -138,5 +141,13 @@ public class UserEntity {
 
     public void setJobTitle(JobTitleEntity jobTitle) {
         this.jobTitle = jobTitle;
+    }
+
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }
