@@ -1,13 +1,11 @@
 package es.ediae.master.programacion.gestionusuario.repository;
 
-import java.util.List;
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import es.ediae.master.programacion.gestionusuario.entity.JobTitleEntity;
 
 @Repository
-public interface JobTitleRepository {
+public interface JobTitleRepository extends JpaRepository<JobTitleEntity, Integer> {
 
-    List<JobTitleEntity> findAllJobTitles();
 }
