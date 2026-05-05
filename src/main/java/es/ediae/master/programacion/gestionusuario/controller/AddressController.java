@@ -19,10 +19,10 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
 
-    // @GetMapping("/user/{userId}/addresses")
-    // public List<AddressEntity> getAddressesByUser(@PathVariable Integer userId) {
-    //     return addressService.findByUserId(userId);
-    // }
+    @GetMapping("/user/{userId}/addresses")
+    public List<AddressEntity> getAddressesByUser(@PathVariable Integer userId) {
+        return addressService.findByUserId(userId);
+    }
 
     @GetMapping("/addresses")
     public List<AddressEntity> getAllAddress() {
