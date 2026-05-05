@@ -2,13 +2,13 @@ package es.ediae.master.programacion.gestionusuario.service;
 
 import java.util.List;
 
-import es.ediae.master.programacion.gestionusuario.entity.AddressEntity;
+import es.ediae.master.programacion.gestionusuario.model.AddressModel;
 
 public interface IAddressService {
 
-    public List<AddressEntity> getAllAddresses();
-    public AddressEntity getAddressById(Integer id);
-    public AddressEntity createAddress(AddressEntity address);
-    public AddressEntity updateAddress(Integer id, AddressEntity address);
-    public void deleteAddress(Integer id);
+    List<AddressModel> obtenerDirecciones(Integer userId, String nickUsuario, String nickContrasena);
+    AddressModel obtenerDireccionPorId(Integer id, String nickUsuario, String nickContrasena);
+    AddressModel crearDireccion(AddressModel addressModel, String nickUsuario, String nickContrasena);
+    AddressModel actualizarDireccion(Integer id, AddressModel addressModel, String nickUsuario, String nickContrasena);
+    Boolean eliminarDireccion(Integer id, String nickUsuario, String nickContrasena);
 }
