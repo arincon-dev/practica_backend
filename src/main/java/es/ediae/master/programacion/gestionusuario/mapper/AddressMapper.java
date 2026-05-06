@@ -1,5 +1,8 @@
 package es.ediae.master.programacion.gestionusuario.mapper;
 
+import java.util.Objects;
+
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import es.ediae.master.programacion.gestionusuario.entity.AddressEntity;
@@ -14,12 +17,17 @@ public class AddressMapper {
             e.getMainAddress(), e.getUser().getId());
     }
 
-    public AddressEntity toEntity(AddressModel m, UserEntity user) {
-        AddressEntity e = new AddressEntity();
-        e.setStreetName(m.getStreetName());
-        e.setStreetNumber(m.getStreetNumber());
-        e.setMainAddress(m.getMainAddress());
-        e.setUser(user);
-        return e;
+    @NonNull
+    public AddressEntity toEntity(@NonNull AddressModel model, @NonNull UserEntity user) {
+
+        Objects.requireNonNull(model, "AddressModel cannot be null");
+        Objects.requireNonNull(user, "UserEntity cannot be null");
+        
+        AddressEntity entity = new AddressEntity();
+        entity.setStreetName(model.getStreetName());
+        entity.setStreetNumber(model.getStreetNumber());
+        entity.setMainAddress(model.getMainAddress());
+        entity.setUser(user);
+        return entity;
     }
 }
