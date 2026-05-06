@@ -18,7 +18,9 @@ public class UserModel {
     private GenderModel gender;
     private JobTitleModel jobTitle;
 
-    public UserModel(Integer id, String username, String password, Date createdAt, String name, String firstSurname, String secondSurname, Date birthdate, Time breakfastTime, Boolean isAdmin, GenderModel gender, JobTitleModel jobTitle) {
+    public UserModel(Integer id, String username, String password, Date createdAt, String name, 
+                    String firstSurname, String secondSurname, Date birthdate, Time breakfastTime, 
+                    Boolean isAdmin, GenderModel gender, JobTitleModel jobTitle) {
         this.id = id;
         this.username = username;
         this.password = password;
