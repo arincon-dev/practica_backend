@@ -25,7 +25,7 @@ public class JobTitleServiceImpl implements IJobTitleService {
     }
 
     @Override
-    public List<JobTitleModel> obtenerPuestosDeTrabajo(String nickUsuario, String nickContrasena) {
+    public List<JobTitleModel> obtenerPuestosTrabajo(String nickUsuario, String nickContrasena) {
         boolean isAuthenticated = userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena);
         if (!isAuthenticated)
             return null;

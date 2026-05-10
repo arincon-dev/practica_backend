@@ -6,5 +6,5 @@ import es.ediae.master.programacion.gestionusuario.model.JobTitleModel;
 
 public interface IJobTitleService {
 
-    List<JobTitleModel> obtenerPuestosDeTrabajo(String nickUsuario, String nickContrasena);
+    List<JobTitleModel> obtenerPuestosTrabajo(String nickUsuario, String nickContrasena);
 }
