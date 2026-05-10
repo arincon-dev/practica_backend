@@ -46,8 +46,6 @@ node_modules
 /.kotlin/
 
 # Local personal notes (do not commit)
-/notes/local-study-guide.md
-/notes/private/
-
+/notes
 # Copilot instruction files
 /.github/instructions/

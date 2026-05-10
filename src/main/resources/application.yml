@@ -20,5 +20,5 @@ spring:
     baseline-on-migrate: true
 springdoc:
   swagger-ui:
-    path: /misproductos.html
+    path: /fullstack.html
     operationsSorter: method
