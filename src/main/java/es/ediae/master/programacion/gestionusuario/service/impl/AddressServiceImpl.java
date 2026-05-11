@@ -84,11 +84,13 @@ public class AddressServiceImpl implements IAddressService {
         AddressEntity existing = addressRepository.findById(id).orElse(null);
         if (existing == null)
             return null;
-
+        
+        if (!existing.getUser().getId().equals(user.getId()))
+            return null;
+        
         existing.setStreetName(addressModel.getStreetName());
         existing.setStreetNumber(addressModel.getStreetNumber());
         existing.setMainAddress(addressModel.getMainAddress());
-        existing.setUser(user);
 
         return addressMapper.toModel(addressRepository.save(existing));
     }
