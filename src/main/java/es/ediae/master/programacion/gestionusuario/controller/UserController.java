@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.ediae.master.programacion.gestionusuario.dto.UserRequestDTO;
+import es.ediae.master.programacion.gestionusuario.dto.UserResponseDTO;
+import es.ediae.master.programacion.gestionusuario.mapper.UserMapper;
 import es.ediae.master.programacion.gestionusuario.model.GenderModel;
 import es.ediae.master.programacion.gestionusuario.model.JobTitleModel;
 import es.ediae.master.programacion.gestionusuario.model.UserModel;
@@ -32,6 +35,8 @@ public class UserController {
     private IGenderService genderService;
     @Autowired
     private IJobTitleService jobTitleService;
+    @Autowired
+    private UserMapper userMapper;
 
     @PostMapping("/iniciar-sesion")
     public ModelMap iniciarSesion(@RequestParam String username, @RequestParam String password) {
@@ -63,10 +68,12 @@ public class UserController {
     }
     
     @PostMapping("/")
-    public ModelMap crearUsuario(@RequestBody UserModel userModel, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+    public ModelMap crearUsuario(@RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
-            UserModel result = userService.crearUsuario(userModel, nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
+            UserModel model = userMapper.toModel(userRequest);
+            UserModel result = userService.crearUsuario(model, nickUsuario, nickContrasena);
+            UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
+            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
         } catch (Exception e) {
             return GeneralControllerUtils.crearRespuestaModelMapError(e);
         }
@@ -76,7 +83,8 @@ public class UserController {
     public ModelMap actualizarUsuario(@PathVariable("id") Integer id, @RequestBody UserModel userModel, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
             UserModel result = userService.actualizarUsuario(id, userModel, nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
+            UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
+            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
         } catch (Exception e) {
             return GeneralControllerUtils.crearRespuestaModelMapError(e);
         }
