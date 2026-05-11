@@ -104,7 +104,7 @@ public class UserController {
     }
 
     // JobTitleController
-    @GetMapping("/puestos-trabajo")
+    @GetMapping("/puestos-de-trabajo")
     public ModelMap obtenerPuestosTrabajo(@RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
             List<JobTitleModel> result = jobTitleService.obtenerPuestosTrabajo(nickUsuario, nickContrasena);
