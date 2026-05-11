@@ -10,6 +10,7 @@ import es.ediae.master.programacion.gestionusuario.entity.JobTitleEntity;
 import es.ediae.master.programacion.gestionusuario.entity.UserEntity;
 import es.ediae.master.programacion.gestionusuario.mapper.UserMapper;
 import es.ediae.master.programacion.gestionusuario.model.UserModel;
+import es.ediae.master.programacion.gestionusuario.repository.AddressRepository;
 import es.ediae.master.programacion.gestionusuario.repository.GenderRepository;
 import es.ediae.master.programacion.gestionusuario.repository.JobTitleRepository;
 import es.ediae.master.programacion.gestionusuario.repository.UserRepository;
@@ -21,13 +22,15 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final GenderRepository genderRepository;
     private final JobTitleRepository jobTitleRepository;
+    private final AddressRepository addressRepository;
     private final UserMapper userMapper;
 
     public UserServiceImpl(UserRepository userRepository, GenderRepository genderRepository,
-            JobTitleRepository jobTitleRepository, UserMapper userMapper) {
+            JobTitleRepository jobTitleRepository, AddressRepository addressRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.genderRepository = genderRepository;
         this.jobTitleRepository = jobTitleRepository;
+        this.addressRepository = addressRepository;
         this.userMapper = userMapper;
     }
 
@@ -179,6 +182,8 @@ public class UserServiceImpl implements IUserService {
         if (existing == null)
             return false;
 
+        //cascade delete (so addresses dont que left alone) :)
+        addressRepository.deleteByUserId(id);
         userRepository.delete(existing);
         return true;
     }

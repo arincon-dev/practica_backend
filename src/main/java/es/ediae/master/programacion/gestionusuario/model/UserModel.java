@@ -1,6 +1,6 @@
 package es.ediae.master.programacion.gestionusuario.model;
 
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Date;
 
 public class UserModel {
@@ -13,13 +13,13 @@ public class UserModel {
     private String firstSurname;
     private String secondSurname;
     private Date birthdate;
-    private Time breakfastTime;
+    private LocalTime breakfastTime;
     private Boolean isAdmin;
     private GenderModel gender;
     private JobTitleModel jobTitle;
 
     public UserModel(Integer id, String username, String password, Date createdAt, String name, 
-                    String firstSurname, String secondSurname, Date birthdate, Time breakfastTime, 
+                    String firstSurname, String secondSurname, Date birthdate, LocalTime breakfastTime, 
                     Boolean isAdmin, GenderModel gender, JobTitleModel jobTitle) {
         this.id = id;
         this.username = username;
@@ -99,11 +99,11 @@ public class UserModel {
         this.birthdate = birthdate;
     }
 
-    public Time getBreakfastTime() {
+    public LocalTime getBreakfastTime() {
         return breakfastTime;
     }
 
-    public void setBreakfastTime(Time breakfastTime) {
+    public void setBreakfastTime(LocalTime breakfastTime) {
         this.breakfastTime = breakfastTime;
     }
 

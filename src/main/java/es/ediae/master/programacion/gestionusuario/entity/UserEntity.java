@@ -1,6 +1,6 @@
 package es.ediae.master.programacion.gestionusuario.entity;
 
-import java.sql.Time;
+import java.time.LocalTime;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -45,7 +45,7 @@ public class UserEntity {
     private Date birthdate;
 
     @Column(name= "breakfast_time", nullable = false)
-    private Time breakfastTime;
+    private LocalTime breakfastTime;
 
     @ManyToOne
     @JoinColumn(name = "gender_id", nullable = false)
@@ -119,11 +119,11 @@ public class UserEntity {
         this.birthdate = birthdate;
     }
 
-    public Time getBreakfastTime() {
+    public LocalTime getBreakfastTime() {
         return breakfastTime;
     }
 
-    public void setBreakfastTime(Time breakfastTime) {
+    public void setBreakfastTime(LocalTime breakfastTime) {
         this.breakfastTime = breakfastTime;
     }
 
