@@ -1,6 +1,11 @@
 package es.ediae.master.programacion.gestionusuario.controller;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+
 import es.ediae.master.programacion.gestionusuario.constant.GeneralConstant;
+
 import org.springframework.ui.ModelMap;
 
 public class GeneralControllerUtils {
@@ -20,8 +25,7 @@ public class GeneralControllerUtils {
         return response;
     }
 
-    //public static ResponseEntity crearRespuestaResponseEntity(HttpStatus httpStatus, Object data) {
-    //    return ResponseEntity.status(httpStatus).body(data);
-    //}
-
+    public static ResponseEntity<Map<String, Object>> crearRespuestaOk(Object data) {
+    return ResponseEntity.ok(Map.of("type", "OK", "exception", "", "data", data));
+}
 }

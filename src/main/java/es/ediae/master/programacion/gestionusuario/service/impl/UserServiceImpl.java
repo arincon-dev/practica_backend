@@ -9,6 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import es.ediae.master.programacion.gestionusuario.entity.GenderEntity;
 import es.ediae.master.programacion.gestionusuario.entity.JobTitleEntity;
 import es.ediae.master.programacion.gestionusuario.entity.UserEntity;
+import es.ediae.master.programacion.gestionusuario.exception.AuthenticationException;
+import es.ediae.master.programacion.gestionusuario.exception.DuplicateUsernameException;
+import es.ediae.master.programacion.gestionusuario.exception.ResourceNotFoundException;
 import es.ediae.master.programacion.gestionusuario.mapper.UserMapper;
 import es.ediae.master.programacion.gestionusuario.model.UserModel;
 import es.ediae.master.programacion.gestionusuario.repository.AddressRepository;
@@ -46,7 +49,7 @@ public class UserServiceImpl implements IUserService {
                 .findByUsernameAndPassword(nickUsuario, nickContrasena)
                 .isPresent();
         if (!isAuthenticated)
-            return null;
+            throw new AuthenticationException();
 
         return userRepository.findAll().stream().map(userMapper::toModel).toList();
     }
@@ -54,14 +57,14 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserModel obtenerUsuarioPorId(Integer id, String nickUsuario, String nickContrasena) {
         if (id == null)
-            return null;
-        boolean isAuthenticated = userRepository
-                .findByUsernameAndPassword(nickUsuario, nickContrasena)
-                .isPresent();
-        if (!isAuthenticated)
-            return null;
+            throw new ResourceNotFoundException("Usuario", id);
 
-        return userRepository.findById(id).map(userMapper::toModel).orElse(null);
+        if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
+            throw new AuthenticationException();
+        
+        return userRepository.findById(id)
+                .map(userMapper::toModel)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
     }
 
     @Override
@@ -70,14 +73,11 @@ public class UserServiceImpl implements IUserService {
         if (userModel == null)
             return null;
 
-        boolean isAuthenticated = userRepository
-                .findByUsernameAndPassword(nickUsuario, nickContrasena)
-                .isPresent();
-        if (!isAuthenticated)
-            return null;
+        if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
+            throw new AuthenticationException();
 
         if (userRepository.existsByUsername(userModel.getUsername()))
-            return null;
+            throw new DuplicateUsernameException(userModel.getUsername());
 
         if (userModel.getGender() == null) {
             return null;
@@ -88,10 +88,8 @@ public class UserServiceImpl implements IUserService {
             return null;
         }
 
-        GenderEntity gender = genderRepository.findById(genderId).orElse(null);
-        if (gender == null) {
-            return null;
-        }
+        GenderEntity gender = genderRepository.findById(genderId)
+            .orElseThrow(() -> new ResourceNotFoundException("Genero", genderId));
 
         JobTitleEntity jobTitle = null;
         if (userModel.getJobTitle() != null) {
@@ -100,10 +98,8 @@ public class UserServiceImpl implements IUserService {
                 return null;
             }
 
-            jobTitle = jobTitleRepository.findById(jobTitleId).orElse(null);
-            if (jobTitle == null) {
-                return null;
-            }
+            jobTitle = jobTitleRepository.findById(jobTitleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Puesto de trabajo", jobTitleId));
         }
         UserEntity entity = userMapper.toEntity(userModel);
         entity.setGender(gender);
@@ -122,16 +118,15 @@ public class UserServiceImpl implements IUserService {
     public UserModel actualizarUsuario(Integer id, UserModel userModel, String nickUsuario, String nickContrasena) {
         if (id == null || userModel == null)
             return null;
-        boolean isAuthenticated = userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena);
-        if (!isAuthenticated)
-            return null;
+        
+        if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
+            throw new AuthenticationException();
 
         if (userRepository.existsByUsernameAndIdNot(userModel.getUsername(), id))
-            return null;
+            throw new DuplicateUsernameException(userModel.getUsername());
 
-        UserEntity existing = userRepository.findById(id).orElse(null);
-        if (existing == null)
-            return null;
+        UserEntity existing = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
 
         existing.setUsername(userModel.getUsername());
         existing.setPassword(userModel.getPassword());
@@ -152,9 +147,8 @@ public class UserServiceImpl implements IUserService {
         if (genderId == null)
             return null;
 
-        GenderEntity gender = genderRepository.findById(genderId).orElse(null);
-        if (gender == null)
-            return null;
+        GenderEntity gender = genderRepository.findById(genderId)
+            .orElseThrow(() -> new ResourceNotFoundException("Genero", genderId));
         existing.setGender(gender);
 
         if (userModel.getJobTitle() != null) {
@@ -162,9 +156,8 @@ public class UserServiceImpl implements IUserService {
             if (jobTitleId == null)
                 return null;
 
-            JobTitleEntity jobTitle = jobTitleRepository.findById(jobTitleId).orElse(null);
-            if (jobTitle == null)
-                return null;
+            JobTitleEntity jobTitle = jobTitleRepository.findById(jobTitleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Puesto de trabajo", jobTitleId));
             existing.setJobTitle(jobTitle);
         } else {
             existing.setJobTitle(null);
@@ -178,17 +171,18 @@ public class UserServiceImpl implements IUserService {
     public Boolean eliminarUsuario(Integer id, String nickUsuario, String nickContrasena) {
         if (id == null)
             return false;
-        boolean isAuthenticated = userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena);
-        if (!isAuthenticated)
-            return false;
+        
+        if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
+            throw new AuthenticationException();
 
-        UserEntity existing = userRepository.findById(id).orElse(null);
-        if (existing == null)
-            return false;
+        UserEntity existing = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
 
         //cascade delete (so addresses dont que left alone) :)
         addressRepository.deleteByUserId(id);
-        userRepository.delete(existing);
+        if (existing != null) {
+            userRepository.delete(existing);
+        }
         return true;
     }
 

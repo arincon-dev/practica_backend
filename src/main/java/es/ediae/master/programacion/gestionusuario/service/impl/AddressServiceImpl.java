@@ -1,12 +1,16 @@
 package es.ediae.master.programacion.gestionusuario.service.impl;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.ediae.master.programacion.gestionusuario.entity.AddressEntity;
 import es.ediae.master.programacion.gestionusuario.entity.UserEntity;
+import es.ediae.master.programacion.gestionusuario.exception.AuthenticationException;
+import es.ediae.master.programacion.gestionusuario.exception.ForbiddenException;
+import es.ediae.master.programacion.gestionusuario.exception.ResourceNotFoundException;
 import es.ediae.master.programacion.gestionusuario.mapper.AddressMapper;
 import es.ediae.master.programacion.gestionusuario.model.AddressModel;
 import es.ediae.master.programacion.gestionusuario.repository.AddressRepository;
@@ -30,13 +34,12 @@ public class AddressServiceImpl implements IAddressService {
     @Override
     public List<AddressModel> obtenerDirecciones(Integer userId, String nickUsuario, String nickContrasena) {
         if (userId == null)
-            return null;
+            throw new ResourceNotFoundException("Usuario", userId);
 
         UserEntity user = userRepository
                 .findByUsernameAndPassword(nickUsuario, nickContrasena)
-                .orElse(null);
-        if (user == null)
-            return null;
+                .orElseThrow(() -> new AuthenticationException());
+        Objects.requireNonNull(user);
 
         return addressRepository.findByUserId(userId).stream().map(addressMapper::toModel).toList();
     }
@@ -44,29 +47,29 @@ public class AddressServiceImpl implements IAddressService {
     @Override
     public AddressModel obtenerDireccion(Integer id, String nickUsuario, String nickContrasena) {
         if (id == null)
-            return null;
+            throw new ResourceNotFoundException("Direccion", id);
 
-        boolean isAuthenticated = userRepository
+        UserEntity user = userRepository
                 .findByUsernameAndPassword(nickUsuario, nickContrasena)
-                .isPresent();
-        if (!isAuthenticated)
-            return null;
+                .orElseThrow(() -> new AuthenticationException());
+        Objects.requireNonNull(user);
 
-        return addressRepository.findById(id).map(addressMapper::toModel).orElse(null);
+        return addressRepository.findById(id)
+                .map(addressMapper::toModel)
+                .orElseThrow(() -> new ResourceNotFoundException("Direccion", id));
     }
 
     @Override
     @Transactional
     public AddressModel crearDireccion(AddressModel addressModel, String nickUsuario, String nickContrasena) {
         if (addressModel == null)
-            return null;
+            throw new ResourceNotFoundException("Direccion", null);
 
         UserEntity user = userRepository
                 .findByUsernameAndPassword(nickUsuario, nickContrasena)
-                .orElse(null);
-        if (user == null)
-            return null;
+                .orElseThrow(() -> new AuthenticationException());
 
+        Objects.requireNonNull(user);
         AddressEntity entity = addressMapper.toEntity(addressModel, user);
         return addressMapper.toModel(addressRepository.save(entity));
     }
@@ -75,21 +78,21 @@ public class AddressServiceImpl implements IAddressService {
     @Transactional
     public AddressModel actualizarDireccion(Integer id, AddressModel addressModel, String nickUsuario,
             String nickContrasena) {
-        if (id == null || addressModel == null)
-            return null;
+        if (id == null)
+            throw new ResourceNotFoundException("Direccion", id);
+
+        if (addressModel == null)
+            throw new ResourceNotFoundException("Direccion", null);
 
         UserEntity user = userRepository
                 .findByUsernameAndPassword(nickUsuario, nickContrasena)
-                .orElse(null);
-        if (user == null)
-            return null;
+                .orElseThrow(() -> new AuthenticationException());
 
-        AddressEntity existing = addressRepository.findById(id).orElse(null);
-        if (existing == null)
-            return null;
+        AddressEntity existing = addressRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Direccion", id));
         
         if (!existing.getUser().getId().equals(user.getId()))
-            return null;
+            throw new ForbiddenException();
         
         existing.setStreetName(addressModel.getStreetName());
         existing.setStreetNumber(addressModel.getStreetNumber());
@@ -102,19 +105,18 @@ public class AddressServiceImpl implements IAddressService {
     @Transactional
     public Boolean eliminarDireccion(Integer id, String nickUsuario, String nickContrasena) {
         if (id == null)
-            return false;
+            throw new ResourceNotFoundException("Direccion", id);
 
         boolean isAuthenticated = userRepository
                 .findByUsernameAndPassword(nickUsuario, nickContrasena)
                 .isPresent();
         if (!isAuthenticated)
-            return false;
+            throw new AuthenticationException();
 
-        AddressEntity existing = addressRepository.findById(id).orElse(null);
-        if (existing == null)
-            return false;
+        addressRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Direccion", id));
 
-        addressRepository.delete(existing);
+        addressRepository.deleteById(id);
         return true;
     }
 }
