@@ -3,6 +3,7 @@ package es.ediae.master.programacion.gestionusuario.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.ediae.master.programacion.gestionusuario.entity.AddressEntity;
 import es.ediae.master.programacion.gestionusuario.entity.UserEntity;
@@ -55,6 +56,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
+    @Transactional
     public AddressModel crearDireccion(AddressModel addressModel, String nickUsuario, String nickContrasena) {
         if (addressModel == null)
             return null;
@@ -70,6 +72,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
+    @Transactional
     public AddressModel actualizarDireccion(Integer id, AddressModel addressModel, String nickUsuario,
             String nickContrasena) {
         if (id == null || addressModel == null)
@@ -96,6 +99,7 @@ public class AddressServiceImpl implements IAddressService {
     }
 
     @Override
+    @Transactional
     public Boolean eliminarDireccion(Integer id, String nickUsuario, String nickContrasena) {
         if (id == null)
             return false;

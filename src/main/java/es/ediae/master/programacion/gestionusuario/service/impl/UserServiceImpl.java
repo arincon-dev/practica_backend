@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.ediae.master.programacion.gestionusuario.entity.GenderEntity;
 import es.ediae.master.programacion.gestionusuario.entity.JobTitleEntity;
@@ -64,6 +65,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserModel crearUsuario(UserModel userModel, String nickUsuario, String nickContrasena) {
         if (userModel == null)
             return null;
@@ -116,6 +118,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserModel actualizarUsuario(Integer id, UserModel userModel, String nickUsuario, String nickContrasena) {
         if (id == null || userModel == null)
             return null;
@@ -171,6 +174,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional
     public Boolean eliminarUsuario(Integer id, String nickUsuario, String nickContrasena) {
         if (id == null)
             return false;
