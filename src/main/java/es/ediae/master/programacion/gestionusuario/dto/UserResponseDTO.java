@@ -1,19 +1,26 @@
 package es.ediae.master.programacion.gestionusuario.dto;
 
+import java.time.LocalTime;
+import java.util.Date;
+
+import es.ediae.master.programacion.gestionusuario.model.GenderModel;
+import es.ediae.master.programacion.gestionusuario.model.JobTitleModel;
+
 public class UserResponseDTO {
 
     //what the server returns
 
     private Integer id;
     private String username;
+    private Date createdAt;
     private String name;
     private String firstSurname;
     private String secondSurname;
-    private String birthDate; //String to control the format
-    private String breakfastTime; //String to control the format
+    private Date birthDate;
+    private LocalTime breakfastTime;
     private boolean isAdmin;
-    private String gender;
-    private String jobTitle;
+    private GenderModel gender;
+    private JobTitleModel jobTitle;
 
     public Integer getId() {
         return id;
@@ -29,6 +36,14 @@ public class UserResponseDTO {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getName() {
@@ -55,43 +70,43 @@ public class UserResponseDTO {
         this.secondSurname = secondSurname;
     }
 
-    public String getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
 
-    public String getBreakfastTime() {
+    public LocalTime getBreakfastTime() {
         return breakfastTime;
     }
 
-    public void setBreakfastTime(String breakfastTime) {
+    public void setBreakfastTime(LocalTime breakfastTime) {
         this.breakfastTime = breakfastTime;
     }
 
-    public boolean isAdmin() {
+    public boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setAdmin(boolean isAdmin) {
+    public void setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 
-    public String getGender() {
+    public GenderModel getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(GenderModel gender) {
         this.gender = gender;
     }
 
-    public String getJobTitle() {
+    public JobTitleModel getJobTitle() {
         return jobTitle;
     }
 
-    public void setJobTitle(String jobTitle) {
+    public void setJobTitle(JobTitleModel jobTitle) {
         this.jobTitle = jobTitle;
     }
 }

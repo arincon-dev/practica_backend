@@ -41,8 +41,8 @@ public class UserEntity {
     @Column(name= "second_surname", nullable = true)
     private String secondSurname;
 
-    @Column(nullable = false)
-    private Date birthdate;
+    @Column(name= "birth_date", nullable = false)
+    private Date birthDate;
 
     @Column(name= "breakfast_time", nullable = false)
     private LocalTime breakfastTime;
@@ -111,12 +111,12 @@ public class UserEntity {
         this.secondSurname = secondSurname;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public LocalTime getBreakfastTime() {

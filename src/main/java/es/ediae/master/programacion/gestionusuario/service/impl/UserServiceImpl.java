@@ -133,7 +133,7 @@ public class UserServiceImpl implements IUserService {
         existing.setName(userModel.getName());
         existing.setFirstSurname(userModel.getFirstSurname());
         existing.setSecondSurname(userModel.getSecondSurname());
-        existing.setBirthdate(userModel.getBirthdate());
+        existing.setBirthDate(userModel.getBirthDate());
         existing.setBreakfastTime(userModel.getBreakfastTime());
 
         if (userModel.getIsAdmin() != null) {

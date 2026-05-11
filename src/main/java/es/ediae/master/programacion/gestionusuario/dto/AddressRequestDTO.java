@@ -3,8 +3,8 @@ package es.ediae.master.programacion.gestionusuario.dto;
 public class AddressRequestDTO {
 
     private String streetName;
-    private String streetNumber;
-    private boolean isMain;
+    private Integer streetNumber;
+    private boolean mainAddress;
     private Integer userId;
 
     public String getStreetName() {
@@ -15,20 +15,20 @@ public class AddressRequestDTO {
         this.streetName = streetName;
     }
 
-    public String getStreetNumber() {
+    public Integer getStreetNumber() {
         return streetNumber;
     }
 
-    public void setStreetNumber(String streetNumber) {
+    public void setStreetNumber(Integer streetNumber) {
         this.streetNumber = streetNumber;
     }
 
-    public boolean isMain() {
-        return isMain;
+    public boolean getMainAddress() {
+        return mainAddress;
     }
 
-    public void setMain(boolean isMain) {
-        this.isMain = isMain;
+    public void setMainAddress(boolean mainAddress) {
+        this.mainAddress = mainAddress;
     }
 
     public Integer getUserId() {

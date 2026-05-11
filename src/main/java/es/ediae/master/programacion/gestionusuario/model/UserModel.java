@@ -12,14 +12,14 @@ public class UserModel {
     private String name;
     private String firstSurname;
     private String secondSurname;
-    private Date birthdate;
+    private Date birthDate;
     private LocalTime breakfastTime;
     private Boolean isAdmin;
     private GenderModel gender;
     private JobTitleModel jobTitle;
 
     public UserModel(Integer id, String username, String password, Date createdAt, String name, 
-                    String firstSurname, String secondSurname, Date birthdate, LocalTime breakfastTime, 
+                    String firstSurname, String secondSurname, Date birthDate, LocalTime breakfastTime, 
                     Boolean isAdmin, GenderModel gender, JobTitleModel jobTitle) {
         this.id = id;
         this.username = username;
@@ -28,7 +28,7 @@ public class UserModel {
         this.name = name;
         this.firstSurname = firstSurname;
         this.secondSurname = secondSurname;
-        this.birthdate = birthdate;
+        this.birthDate = birthDate;
         this.breakfastTime = breakfastTime;
         this.isAdmin = isAdmin;
         this.gender = gender;
@@ -91,12 +91,12 @@ public class UserModel {
         this.secondSurname = secondSurname;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setBirthdate(Date birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
     }
 
     public LocalTime getBreakfastTime() {
