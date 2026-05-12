@@ -14,27 +14,27 @@ El proyecto requiere las siguientes variables de entorno para conectar con la ba
 
 | Variable              | Descripción                                      | Ejemplo                                         |
 |-----------------------|--------------------------------------------------|-------------------------------------------------|
-| `MYSQL_DATABASE_URL`  | URL de conexión JDBC a la base de datos          | `jdbc:mysql://localhost:3306/usuarios_db`       |
-| `MYSQL_DATABASE_USER` | Usuario de la base de datos                      | `root`                                          |
-| `MYSQL_DATABASE_PWD`  | Contraseña del usuario de la base de datos       | `mi_password`                                   |
+| `MYSQL_DATABASE_URL`  | URL de conexión JDBC a la base de datos          | `jdbc:mysql://localhost:3306/practica_final_backend` |
+| `MYSQL_DATABASE_USER` | Usuario de la base de datos                      | `root`                                               |
+| `MYSQL_DATABASE_PWD`  | Contraseña del usuario de la base de datos       | `tu_password`                                        |
 
 **Windows (PowerShell):**
 ```powershell
-$env:MYSQL_DATABASE_URL="jdbc:mysql://localhost:3306/usuarios_db"
+$env:MYSQL_DATABASE_URL="jdbc:mysql://localhost:3306/practica_final_backend"
 $env:MYSQL_DATABASE_USER="root"
 $env:MYSQL_DATABASE_PWD="tu_password"
 ```
 
 **Windows (CMD):**
 ```cmd
-set MYSQL_DATABASE_URL=jdbc:mysql://localhost:3306/usuarios_db
+set MYSQL_DATABASE_URL=jdbc:mysql://localhost:3306/practica_final_backend
 set MYSQL_DATABASE_USER=root
 set MYSQL_DATABASE_PWD=tu_password
 ```
 
 **Linux/Mac:**
 ```bash
-export MYSQL_DATABASE_URL="jdbc:mysql://localhost:3306/usuarios_db"
+export MYSQL_DATABASE_URL="jdbc:mysql://localhost:3306/practica_final_backend"
 export MYSQL_DATABASE_USER="root"
 export MYSQL_DATABASE_PWD="tu_password"
 ```
@@ -47,7 +47,7 @@ Puedes configurar las variables de entorno de varias formas en VS Code:
 
    Crea un archivo `.env` en la raíz del proyecto:
    ```env
-   MYSQL_DATABASE_URL=jdbc:mysql://localhost:3306/usuarios_db
+   MYSQL_DATABASE_URL=jdbc:mysql://localhost:3306/practica_final_backend
    MYSQL_DATABASE_USER=root
    MYSQL_DATABASE_PWD=tu_password
    ```
@@ -65,7 +65,7 @@ Puedes configurar las variables de entorno de varias formas en VS Code:
          "request": "launch",
          "mainClass": "es.ediae.master.programacion.gestionusuario.UsuarioApplication",
          "env": {
-           "MYSQL_DATABASE_URL": "jdbc:mysql://localhost:3306/usuarios_db",
+           "MYSQL_DATABASE_URL": "jdbc:mysql://localhost:3306/practica_final_backend",
            "MYSQL_DATABASE_USER": "root",
            "MYSQL_DATABASE_PWD": "tu_password"
          }
@@ -130,7 +130,7 @@ java -jar target/usuarios-0.0.1-SNAPSHOT.jar
 Una vez iniciada la aplicación:
 
 - **API REST:** `http://localhost:8080`
-- **Documentación Swagger UI:** `http://localhost:8080/misproductos.html`
+- **Documentación Swagger UI:** `http://localhost:8080/fullstack.html`
 
 ### Migraciones de base de datos
 
