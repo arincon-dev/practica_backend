@@ -5,6 +5,9 @@ public class JobTitleModel {
     private Integer id;
     private String name;
 
+    public JobTitleModel() {
+    }
+
     public JobTitleModel(Integer id, String name) {
         this.id = id;
         this.name = name;

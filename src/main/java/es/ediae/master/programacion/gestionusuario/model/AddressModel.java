@@ -8,6 +8,9 @@ public class AddressModel {
     private Boolean mainAddress;
     private Integer userId;
 
+    public AddressModel() {
+    }
+
     public AddressModel(Integer id, String streetName, Integer streetNumber, Boolean mainAddress, Integer userId) {
         this.id = id;
         this.streetName = streetName;

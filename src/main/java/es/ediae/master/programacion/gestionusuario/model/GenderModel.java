@@ -5,6 +5,9 @@ public class GenderModel {
     private Integer id;
     private String name;
 
+    public GenderModel() {
+    }
+
     public GenderModel(Integer id, String name) {
         this.id = id;
         this.name = name;
