@@ -39,7 +39,9 @@ public class AddressServiceImpl implements IAddressService {
         UserEntity user = userRepository
                 .findByUsernameAndPassword(nickUsuario, nickContrasena)
                 .orElseThrow(() -> new AuthenticationException());
-        Objects.requireNonNull(user);
+
+        if (!user.getId().equals(userId))
+            throw new ForbiddenException();
 
         return addressRepository.findByUserId(userId).stream().map(addressMapper::toModel).toList();
     }
@@ -52,11 +54,14 @@ public class AddressServiceImpl implements IAddressService {
         UserEntity user = userRepository
                 .findByUsernameAndPassword(nickUsuario, nickContrasena)
                 .orElseThrow(() -> new AuthenticationException());
-        Objects.requireNonNull(user);
 
-        return addressRepository.findById(id)
-                .map(addressMapper::toModel)
+        AddressEntity address = addressRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Direccion", id));
+
+        if (!address.getUser().getId().equals(user.getId()))
+            throw new ForbiddenException();
+
+        return addressMapper.toModel(address);
     }
 
     @Override
@@ -107,14 +112,15 @@ public class AddressServiceImpl implements IAddressService {
         if (id == null)
             throw new ResourceNotFoundException("Direccion", id);
 
-        boolean isAuthenticated = userRepository
+        UserEntity user = userRepository
                 .findByUsernameAndPassword(nickUsuario, nickContrasena)
-                .isPresent();
-        if (!isAuthenticated)
-            throw new AuthenticationException();
+                .orElseThrow(() -> new AuthenticationException());
 
-        addressRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Direccion", id));
+        AddressEntity address = addressRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Direccion", id));
+
+        if (!address.getUser().getId().equals(user.getId()))
+            throw new ForbiddenException();
 
         addressRepository.deleteById(id);
         return true;

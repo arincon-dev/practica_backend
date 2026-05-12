@@ -1,9 +1,10 @@
 package es.ediae.master.programacion.gestionusuario.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,58 +32,38 @@ public class AddressController {
     private AddressMapper addressMapper;
 
     @GetMapping("/usuario/{userId}")
-    public ModelMap obtenerDirecciones(@PathVariable("userId") Integer userId, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
+    public ResponseEntity<Map<String, Object>> obtenerDirecciones(@PathVariable("userId") Integer userId, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
             List<AddressModel> result = addressService.obtenerDirecciones(userId, nickUsuario, nickContrasena);
             List<AddressResponseDTO> response = result != null ? result.stream().map(addressMapper::toResponse).toList() : null;
-            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+            return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", response));
     }
 
     @GetMapping("/{id}")
-    public ModelMap obtenerDireccion(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
-            AddressModel result = addressService.obtenerDireccion(id, nickUsuario, nickContrasena);
-            AddressResponseDTO response = result != null ? addressMapper.toResponse(result) : null;
-            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+    public ResponseEntity<Map<String, Object>> obtenerDireccion(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+        AddressModel result = addressService.obtenerDireccion(id, nickUsuario, nickContrasena);
+        AddressResponseDTO response = result != null ? addressMapper.toResponse(result) : null;
+        return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", response));
     }
 
     @PostMapping("/")
-    public ModelMap crearDireccion(@RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
+    public ResponseEntity<Map<String, Object>> crearDireccion(@RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
             AddressModel model = addressMapper.toModel(addressRequest);
             AddressModel result = addressService.crearDireccion(model, nickUsuario, nickContrasena);
             AddressResponseDTO response = result != null ? addressMapper.toResponse(result) : null;
-            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+            return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", response));
     }
 
     @PutMapping("/{id}")
-    public ModelMap actualizarDireccion(@PathVariable("id") Integer id, @RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
+    public ResponseEntity<Map<String, Object>> actualizarDireccion(@PathVariable("id") Integer id, @RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
             AddressModel model = addressMapper.toModel(addressRequest);
             AddressModel result = addressService.actualizarDireccion(id, model, nickUsuario, nickContrasena);
             AddressResponseDTO response = result != null ? addressMapper.toResponse(result) : null;
-            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+            return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", response));
     }
 
     @DeleteMapping("/{id}")
-    public ModelMap eliminarDireccion(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
+    public ResponseEntity<Map<String, Object>> eliminarDireccion(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
             Boolean result = addressService.eliminarDireccion(id, nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+            return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", result));
     }
 }

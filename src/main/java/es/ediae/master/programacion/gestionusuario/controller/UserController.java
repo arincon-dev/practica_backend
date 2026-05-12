@@ -1,9 +1,10 @@
 package es.ediae.master.programacion.gestionusuario.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,92 +40,60 @@ public class UserController {
     private UserMapper userMapper;
 
     @PostMapping("/iniciar-sesion")
-    public ModelMap iniciarSesion(@RequestParam String username, @RequestParam String password) {
-        try {
-            boolean result = userService.iniciarSesion(username, password);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+    public ResponseEntity<Map<String, Object>> iniciarSesion(@RequestParam String username, @RequestParam String password) {
+        boolean result = userService.iniciarSesion(username, password);
+        return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", result));
     }
 
     @GetMapping("/")
-    public ModelMap obtenerUsuarios(@RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
+    public ResponseEntity<Map<String, Object>> obtenerUsuarios(@RequestParam String nickUsuario, @RequestParam String nickContrasena) {
             List<UserModel> result = userService.obtenerUsuarios(nickUsuario, nickContrasena);
             List<UserResponseDTO> response = result.stream()
                     .map(userMapper::toResponse)
                     .toList();
-            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+            return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", response));
     }
     
     @GetMapping("/{id}")
-    public ModelMap obtenerUsuario(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
-            UserModel result = userService.obtenerUsuarioPorId(id, nickUsuario, nickContrasena);
-            UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
-            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+    public ResponseEntity<Map<String, Object>> obtenerUsuario(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+        UserModel result = userService.obtenerUsuarioPorId(id, nickUsuario, nickContrasena);
+        UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
+        return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", response));
     }
     
     @PostMapping("/")
-    public ModelMap crearUsuario(@RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
-            UserModel model = userMapper.toModel(userRequest);
-            UserModel result = userService.crearUsuario(model, nickUsuario, nickContrasena);
-            UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
-            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+    public ResponseEntity<Map<String, Object>> crearUsuario(@RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+        UserModel model = userMapper.toModel(userRequest);
+        UserModel result = userService.crearUsuario(model, nickUsuario, nickContrasena);
+        UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
+        return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", response));
     }
 
     @PutMapping("/{id}")
-    public ModelMap actualizarUsuario(@PathVariable("id") Integer id, @RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
-            UserModel model = userMapper.toModel(userRequest);
-            UserModel result = userService.actualizarUsuario(id, model, nickUsuario, nickContrasena);
-            UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
-            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+    public ResponseEntity<Map<String, Object>> actualizarUsuario(@PathVariable("id") Integer id, @RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+        UserModel model = userMapper.toModel(userRequest);
+        UserModel result = userService.actualizarUsuario(id, model, nickUsuario, nickContrasena);
+        UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
+        return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", response));
     }
 
     @DeleteMapping("/{id}")
-    public ModelMap eliminarUsuario(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
-            boolean result = userService.eliminarUsuario(id, nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+    public ResponseEntity<Map<String, Object>> eliminarUsuario(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+        boolean result = userService.eliminarUsuario(id, nickUsuario, nickContrasena);
+        return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", result));
     }
 
     // GenderController
     @GetMapping("/generos")
-    public ModelMap obtenerGeneros(@RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
-            List<GenderModel> result = genderService.obtenerGeneros(nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+    public ResponseEntity<Map<String, Object>> obtenerGeneros(@RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+        List<GenderModel> result = genderService.obtenerGeneros(nickUsuario, nickContrasena);
+        return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", result));
     }
 
     // JobTitleController
     @GetMapping("/puestos-de-trabajo")
-    public ModelMap obtenerPuestosTrabajo(@RequestParam String nickUsuario, @RequestParam String nickContrasena) {
-        try {
-            List<JobTitleModel> result = jobTitleService.obtenerPuestosTrabajo(nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
-        } catch (Exception e) {
-            return GeneralControllerUtils.crearRespuestaModelMapError(e);
-        }
+    public ResponseEntity<Map<String, Object>> obtenerPuestosTrabajo(@RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+        List<JobTitleModel> result = jobTitleService.obtenerPuestosTrabajo(nickUsuario, nickContrasena);
+        return ResponseEntity.ok(Map.of("type", "OK", "message", "", "data", result));
     }
 }
