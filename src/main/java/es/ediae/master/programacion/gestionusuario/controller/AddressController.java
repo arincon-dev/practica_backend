@@ -20,6 +20,7 @@ import es.ediae.master.programacion.gestionusuario.dto.AddressResponseDTO;
 import es.ediae.master.programacion.gestionusuario.mapper.AddressMapper;
 import es.ediae.master.programacion.gestionusuario.model.AddressModel;
 import es.ediae.master.programacion.gestionusuario.service.IAddressService;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -46,7 +47,7 @@ public class AddressController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Map<String, Object>> crearDireccion(@RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+    public ResponseEntity<Map<String, Object>> crearDireccion(@Valid @RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
             AddressModel model = addressMapper.toModel(addressRequest);
             AddressModel result = addressService.crearDireccion(model, nickUsuario, nickContrasena);
             AddressResponseDTO response = result != null ? addressMapper.toResponse(result) : null;
@@ -54,7 +55,7 @@ public class AddressController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizarDireccion(@PathVariable("id") Integer id, @RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+    public ResponseEntity<Map<String, Object>> actualizarDireccion(@PathVariable("id") Integer id, @Valid @RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
             AddressModel model = addressMapper.toModel(addressRequest);
             AddressModel result = addressService.actualizarDireccion(id, model, nickUsuario, nickContrasena);
             AddressResponseDTO response = result != null ? addressMapper.toResponse(result) : null;

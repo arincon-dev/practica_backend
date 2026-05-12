@@ -1,10 +1,16 @@
 package es.ediae.master.programacion.gestionusuario.dto;
 
-public class AddressRequestDTO {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
+public class AddressRequestDTO {
+    @NotBlank
     private String streetName;
+    @NotNull
     private Integer streetNumber;
-    private boolean mainAddress;
+    @NotNull
+    private Boolean mainAddress;
+    @NotNull
     private Integer userId;
 
     public String getStreetName() {
@@ -23,11 +29,11 @@ public class AddressRequestDTO {
         this.streetNumber = streetNumber;
     }
 
-    public boolean getMainAddress() {
+    public Boolean getMainAddress() {
         return mainAddress;
     }
 
-    public void setMainAddress(boolean mainAddress) {
+    public void setMainAddress(Boolean mainAddress) {
         this.mainAddress = mainAddress;
     }
 

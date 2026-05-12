@@ -24,6 +24,7 @@ import es.ediae.master.programacion.gestionusuario.model.UserModel;
 import es.ediae.master.programacion.gestionusuario.service.IGenderService;
 import es.ediae.master.programacion.gestionusuario.service.IJobTitleService;
 import es.ediae.master.programacion.gestionusuario.service.IUserService;
+import jakarta.validation.Valid;
 
 
 @RestController
@@ -62,7 +63,7 @@ public class UserController {
     }
     
     @PostMapping("/")
-    public ResponseEntity<Map<String, Object>> crearUsuario(@RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+    public ResponseEntity<Map<String, Object>> crearUsuario(@Valid @RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         UserModel model = userMapper.toModel(userRequest);
         UserModel result = userService.crearUsuario(model, nickUsuario, nickContrasena);
         UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
@@ -70,7 +71,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> actualizarUsuario(@PathVariable("id") Integer id, @RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+    public ResponseEntity<Map<String, Object>> actualizarUsuario(@PathVariable("id") Integer id, @Valid @RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         UserModel model = userMapper.toModel(userRequest);
         UserModel result = userService.actualizarUsuario(id, model, nickUsuario, nickContrasena);
         UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;

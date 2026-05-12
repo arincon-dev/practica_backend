@@ -3,18 +3,26 @@ package es.ediae.master.programacion.gestionusuario.dto;
 import java.time.LocalTime;
 import java.util.Date;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class UserRequestDTO {
 
     //what the client sends when creating or updating a user
-    
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
+    @NotBlank
     private String name;
+    @NotBlank
     private String firstSurname;
     private String secondSurname;
     private Date birthDate;
     private LocalTime breakfastTime;
-    private boolean isAdmin;
+    @NotNull
+    private Boolean isAdmin;
+    @NotNull
     private Integer genderId;
     private Integer jobTitleId;
 
@@ -74,11 +82,11 @@ public class UserRequestDTO {
         this.breakfastTime = breakfastTime;
     }
 
-    public boolean getIsAdmin() {
+    public Boolean getIsAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
+    public void setIsAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 
