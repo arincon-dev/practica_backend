@@ -42,7 +42,6 @@ public class AddressMapper {
                 request.getUserId());
     }
 
-    // New: convert AddressModel to AddressResponse
     public AddressResponseDTO toResponse(AddressModel model) {
         AddressResponseDTO response = new AddressResponseDTO();
         response.setId(model.getId());

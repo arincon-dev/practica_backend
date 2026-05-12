@@ -3,10 +3,9 @@ package es.ediae.master.programacion.gestionusuario.controller;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 
 import es.ediae.master.programacion.gestionusuario.constant.GeneralConstant;
-
-import org.springframework.ui.ModelMap;
 
 public class GeneralControllerUtils {
     public static ModelMap crearRespuestaModelMapOk(Object data) {
@@ -26,6 +25,6 @@ public class GeneralControllerUtils {
     }
 
     public static ResponseEntity<Map<String, Object>> crearRespuestaOk(Object data) {
-    return ResponseEntity.ok(Map.of("type", "OK", "exception", "", "data", data));
-}
+        return ResponseEntity.ok(Map.of("type", "OK", "exception", "", "data", data));
+    }
 }

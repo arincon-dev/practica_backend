@@ -47,11 +47,15 @@ public class UserController {
             return GeneralControllerUtils.crearRespuestaModelMapError(e);
         }
     }
+
     @GetMapping("/")
     public ModelMap obtenerUsuarios(@RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
             List<UserModel> result = userService.obtenerUsuarios(nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
+            List<UserResponseDTO> response = result.stream()
+                    .map(userMapper::toResponse)
+                    .toList();
+            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
         } catch (Exception e) {
             return GeneralControllerUtils.crearRespuestaModelMapError(e);
         }
@@ -61,7 +65,8 @@ public class UserController {
     public ModelMap obtenerUsuario(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
             UserModel result = userService.obtenerUsuarioPorId(id, nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
+            UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
+            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
         } catch (Exception e) {
             return GeneralControllerUtils.crearRespuestaModelMapError(e);
         }
@@ -80,9 +85,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ModelMap actualizarUsuario(@PathVariable("id") Integer id, @RequestBody UserModel userModel, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+    public ModelMap actualizarUsuario(@PathVariable("id") Integer id, @RequestBody UserRequestDTO userRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
-            UserModel result = userService.actualizarUsuario(id, userModel, nickUsuario, nickContrasena);
+            UserModel model = userMapper.toModel(userRequest);
+            UserModel result = userService.actualizarUsuario(id, model, nickUsuario, nickContrasena);
             UserResponseDTO response = result != null ? userMapper.toResponse(result) : null;
             return GeneralControllerUtils.crearRespuestaModelMapOk(response);
         } catch (Exception e) {

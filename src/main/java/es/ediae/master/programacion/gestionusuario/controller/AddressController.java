@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.ediae.master.programacion.gestionusuario.dto.AddressRequestDTO;
+import es.ediae.master.programacion.gestionusuario.dto.AddressResponseDTO;
+import es.ediae.master.programacion.gestionusuario.mapper.AddressMapper;
 import es.ediae.master.programacion.gestionusuario.model.AddressModel;
 import es.ediae.master.programacion.gestionusuario.service.IAddressService;
 
@@ -24,12 +27,15 @@ public class AddressController {
     
     @Autowired
     private IAddressService addressService;
+    @Autowired
+    private AddressMapper addressMapper;
 
     @GetMapping("/usuario/{userId}")
     public ModelMap obtenerDirecciones(@PathVariable("userId") Integer userId, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
             List<AddressModel> result = addressService.obtenerDirecciones(userId, nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
+            List<AddressResponseDTO> response = result != null ? result.stream().map(addressMapper::toResponse).toList() : null;
+            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
         } catch (Exception e) {
             return GeneralControllerUtils.crearRespuestaModelMapError(e);
         }
@@ -39,27 +45,32 @@ public class AddressController {
     public ModelMap obtenerDireccion(@PathVariable("id") Integer id, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
             AddressModel result = addressService.obtenerDireccion(id, nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
+            AddressResponseDTO response = result != null ? addressMapper.toResponse(result) : null;
+            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
         } catch (Exception e) {
             return GeneralControllerUtils.crearRespuestaModelMapError(e);
         }
     }
 
     @PostMapping("/")
-    public ModelMap crearDireccion(@RequestBody AddressModel addressModel, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+    public ModelMap crearDireccion(@RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
-            AddressModel result = addressService.crearDireccion(addressModel, nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
+            AddressModel model = addressMapper.toModel(addressRequest);
+            AddressModel result = addressService.crearDireccion(model, nickUsuario, nickContrasena);
+            AddressResponseDTO response = result != null ? addressMapper.toResponse(result) : null;
+            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
         } catch (Exception e) {
             return GeneralControllerUtils.crearRespuestaModelMapError(e);
         }
     }
 
     @PutMapping("/{id}")
-    public ModelMap actualizarDireccion(@PathVariable("id") Integer id, @RequestBody AddressModel addressModel, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
+    public ModelMap actualizarDireccion(@PathVariable("id") Integer id, @RequestBody AddressRequestDTO addressRequest, @RequestParam String nickUsuario, @RequestParam String nickContrasena) {
         try {
-            AddressModel result = addressService.actualizarDireccion(id, addressModel, nickUsuario, nickContrasena);
-            return GeneralControllerUtils.crearRespuestaModelMapOk(result);
+            AddressModel model = addressMapper.toModel(addressRequest);
+            AddressModel result = addressService.actualizarDireccion(id, model, nickUsuario, nickContrasena);
+            AddressResponseDTO response = result != null ? addressMapper.toResponse(result) : null;
+            return GeneralControllerUtils.crearRespuestaModelMapOk(response);
         } catch (Exception e) {
             return GeneralControllerUtils.crearRespuestaModelMapError(e);
         }

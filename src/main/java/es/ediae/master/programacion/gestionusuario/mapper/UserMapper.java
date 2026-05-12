@@ -41,7 +41,6 @@ public class UserMapper {
         return entity;
     }
 
-    // New: convert UserRequest (incoming DTO) to internal UserModel
     public UserModel toModel(UserRequestDTO request) {
         GenderModel gender = request.getGenderId() != null
                 ? new GenderModel(request.getGenderId(), null)
@@ -57,7 +56,6 @@ public class UserMapper {
 
     }
 
-    // New: convert internal UserModel to UserResponse (outgoing DTO, no password)
     public UserResponseDTO toResponse(UserModel model) {
         UserResponseDTO response = new UserResponseDTO();
         response.setId(model.getId());
