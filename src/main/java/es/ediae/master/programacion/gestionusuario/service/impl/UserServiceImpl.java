@@ -2,6 +2,7 @@ package es.ediae.master.programacion.gestionusuario.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +62,7 @@ public class UserServiceImpl implements IUserService {
 
         if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
             throw new AuthenticationException();
-        
+
         return userRepository.findById(id)
                 .map(userMapper::toModel)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
@@ -71,7 +72,7 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     public UserModel crearUsuario(UserModel userModel, String nickUsuario, String nickContrasena) {
         if (userModel == null)
-            return null;
+            throw new ResourceNotFoundException("Usuario", null);
 
         if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
             throw new AuthenticationException();
@@ -79,27 +80,22 @@ public class UserServiceImpl implements IUserService {
         if (userRepository.existsByUsername(userModel.getUsername()))
             throw new DuplicateUsernameException(userModel.getUsername());
 
-        if (userModel.getGender() == null) {
-            return null;
-        }
-        
-        Integer genderId = userModel.getGender().getId();
-        if (genderId == null) {
-            return null;
-        }
+        if (userModel.getGender() == null || userModel.getGender().getId() == null) 
+            throw new ResourceNotFoundException("Genero", null);
+
+        Integer genderId = Objects.requireNonNull(userModel.getGender().getId());
 
         GenderEntity gender = genderRepository.findById(genderId)
-            .orElseThrow(() -> new ResourceNotFoundException("Genero", genderId));
+                .orElseThrow(() -> new ResourceNotFoundException("Genero", genderId));
 
         JobTitleEntity jobTitle = null;
         if (userModel.getJobTitle() != null) {
             Integer jobTitleId = userModel.getJobTitle().getId();
-            if (jobTitleId == null) {
-                return null;
-            }
+            if (jobTitleId == null)
+                throw new ResourceNotFoundException("Puesto de trabajo", null);
 
             jobTitle = jobTitleRepository.findById(jobTitleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Puesto de trabajo", jobTitleId));
+                    .orElseThrow(() -> new ResourceNotFoundException("Puesto de trabajo", jobTitleId));
         }
         UserEntity entity = userMapper.toEntity(userModel);
         entity.setGender(gender);
@@ -117,8 +113,8 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     public UserModel actualizarUsuario(Integer id, UserModel userModel, String nickUsuario, String nickContrasena) {
         if (id == null || userModel == null)
-            return null;
-        
+            throw new ResourceNotFoundException("Usuario", id);
+
         if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
             throw new AuthenticationException();
 
@@ -126,7 +122,7 @@ public class UserServiceImpl implements IUserService {
             throw new DuplicateUsernameException(userModel.getUsername());
 
         UserEntity existing = userRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
 
         existing.setUsername(userModel.getUsername());
         existing.setPassword(userModel.getPassword());
@@ -141,23 +137,23 @@ public class UserServiceImpl implements IUserService {
         }
 
         if (userModel.getGender() == null)
-            return null;
+            throw new ResourceNotFoundException("Genero", null);
 
         Integer genderId = userModel.getGender().getId();
         if (genderId == null)
-            return null;
+            throw new ResourceNotFoundException("Genero", null);
 
         GenderEntity gender = genderRepository.findById(genderId)
-            .orElseThrow(() -> new ResourceNotFoundException("Genero", genderId));
+                .orElseThrow(() -> new ResourceNotFoundException("Genero", genderId));
         existing.setGender(gender);
 
         if (userModel.getJobTitle() != null) {
             Integer jobTitleId = userModel.getJobTitle().getId();
             if (jobTitleId == null)
-                return null;
+                throw new ResourceNotFoundException("Puesto de trabajo", null);
 
             JobTitleEntity jobTitle = jobTitleRepository.findById(jobTitleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Puesto de trabajo", jobTitleId));
+                    .orElseThrow(() -> new ResourceNotFoundException("Puesto de trabajo", jobTitleId));
             existing.setJobTitle(jobTitle);
         } else {
             existing.setJobTitle(null);
@@ -170,19 +166,18 @@ public class UserServiceImpl implements IUserService {
     @Transactional
     public Boolean eliminarUsuario(Integer id, String nickUsuario, String nickContrasena) {
         if (id == null)
-            return false;
-        
+            throw new ResourceNotFoundException("Usuario", id);
+
         if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
             throw new AuthenticationException();
 
         UserEntity existing = userRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario", id));
+        existing = Objects.requireNonNull(existing);
 
-        //cascade delete (so addresses dont que left alone) :)
+        // cascade delete (so addresses dont get left alone) :)
         addressRepository.deleteByUserId(id);
-        if (existing != null) {
-            userRepository.delete(existing);
-        }
+        userRepository.delete(existing);
         return true;
     }
 

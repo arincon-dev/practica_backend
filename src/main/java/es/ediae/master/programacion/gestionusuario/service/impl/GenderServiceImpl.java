@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import es.ediae.master.programacion.gestionusuario.exception.AuthenticationException;
 import es.ediae.master.programacion.gestionusuario.mapper.GenderMapper;
 import es.ediae.master.programacion.gestionusuario.model.GenderModel;
 import es.ediae.master.programacion.gestionusuario.repository.GenderRepository;
@@ -26,9 +27,8 @@ public class GenderServiceImpl implements IGenderService {
 
     @Override
     public List<GenderModel> obtenerGeneros(String nickUsuario, String nickContrasena) {
-        boolean isAuthenticated = userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena);
-        if (!isAuthenticated)
-            return null;
+        if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
+            throw new AuthenticationException();
 
         return genderRepository.findAll().stream().map(genderMapper::toModel).toList();
     }

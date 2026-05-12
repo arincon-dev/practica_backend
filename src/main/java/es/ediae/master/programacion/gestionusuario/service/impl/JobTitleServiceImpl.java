@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import es.ediae.master.programacion.gestionusuario.exception.AuthenticationException;
 import es.ediae.master.programacion.gestionusuario.mapper.JobTitleMapper;
 import es.ediae.master.programacion.gestionusuario.model.JobTitleModel;
 import es.ediae.master.programacion.gestionusuario.repository.JobTitleRepository;
@@ -26,9 +27,8 @@ public class JobTitleServiceImpl implements IJobTitleService {
 
     @Override
     public List<JobTitleModel> obtenerPuestosTrabajo(String nickUsuario, String nickContrasena) {
-        boolean isAuthenticated = userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena);
-        if (!isAuthenticated)
-            return null;
+        if (!userRepository.existsByUsernameAndPassword(nickUsuario, nickContrasena))
+            throw new AuthenticationException();
 
         return jobTitleRepository.findAll().stream().map(jobTitleMapper::toModel).toList();
     }
