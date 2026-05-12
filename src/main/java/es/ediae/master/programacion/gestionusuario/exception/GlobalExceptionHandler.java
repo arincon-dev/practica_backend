@@ -4,17 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import io.swagger.v3.oas.annotations.Hidden;
 
 @RestControllerAdvice // Spring scans for @RestControllerAdvice automatically
 @Hidden // Hide from Swagger documentation
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private Map<String, Object> errorBody(String message) {
         Map<String, Object> body = new HashMap<>();
@@ -52,14 +58,29 @@ public class GlobalExceptionHandler {
                 .body(errorBody(ex.getMessage()));
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            @NonNull MethodArgumentNotValidException ex,
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("type", "ERROR", "message", message, "data", null));
+                .body(errorBody(message));
+    }
+
+        @Override
+        protected ResponseEntity<Object> handleHttpMessageNotReadable(
+                @NonNull HttpMessageNotReadableException ex,
+                @NonNull HttpHeaders headers,
+                @NonNull HttpStatusCode status,
+                @NonNull WebRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorBody("Malformed JSON request body"));
     }
 
     @ExceptionHandler(Exception.class)

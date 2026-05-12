@@ -3,6 +3,7 @@ package es.ediae.master.programacion.gestionusuario.dto;
 import java.time.LocalTime;
 import java.util.Date;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -10,20 +11,30 @@ public class UserRequestDTO {
 
     //what the client sends when creating or updating a user
     @NotBlank
+    @Schema(example = "johnsmith")
     private String username;
     @NotBlank
+    @Schema(example = "password123")
     private String password;
     @NotBlank
+    @Schema(example = "John")
     private String name;
     @NotBlank
+    @Schema(example = "Smith")
     private String firstSurname;
+    @Schema(example = "Doe")
     private String secondSurname;
+    @Schema(type = "string", format = "date", example = "2006-05-12")
     private Date birthDate;
+    @Schema(type = "string", format = "time", example = "10:00:00")
     private LocalTime breakfastTime;
     @NotNull
+    @Schema(example = "true")
     private Boolean isAdmin;
     @NotNull
+    @Schema(example = "1")
     private Integer genderId;
+    @Schema(example = "2")
     private Integer jobTitleId;
 
     public String getUsername() {

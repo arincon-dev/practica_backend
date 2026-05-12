@@ -1,16 +1,21 @@
 package es.ediae.master.programacion.gestionusuario.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class AddressRequestDTO {
     @NotBlank
+    @Schema(example = "Calle Gran Via")
     private String streetName;
     @NotNull
+    @Schema(example = "123")
     private Integer streetNumber;
     @NotNull
+    @Schema(example = "true")
     private Boolean mainAddress;
     @NotNull
+    @Schema(example = "1")
     private Integer userId;
 
     public String getStreetName() {
