@@ -31,6 +31,24 @@ public class AddressServiceImpl implements IAddressService {
         this.addressMapper = addressMapper;
     }
 
+    private void desmarcarDireccionesPrincipales(Integer userId, Integer excludeId) {
+        List<AddressEntity> mainAddresses = addressRepository.findMainAddressesByUserId(userId);
+        if (mainAddresses == null || mainAddresses.isEmpty()) {
+            return;
+        }
+
+        List<AddressEntity> toUpdate = mainAddresses.stream()
+                .filter(address -> excludeId == null || !address.getId().equals(excludeId))
+                .toList();
+
+        if (toUpdate.isEmpty()) {
+            return;
+        }
+
+        toUpdate.forEach(address -> address.setMainAddress(false));
+        addressRepository.saveAll(toUpdate);
+    }
+
     @Override
     public List<AddressModel> obtenerDirecciones(Integer userId, String nickUsuario, String nickContrasena) {
         if (userId == null)
@@ -75,6 +93,10 @@ public class AddressServiceImpl implements IAddressService {
                 .orElseThrow(() -> new AuthenticationException());
 
         Objects.requireNonNull(user);
+        if (Boolean.TRUE.equals(addressModel.getMainAddress())) {
+            desmarcarDireccionesPrincipales(user.getId(), null);
+        }
+
         AddressEntity entity = addressMapper.toEntity(addressModel, user);
         return addressMapper.toModel(addressRepository.save(entity));
     }
@@ -98,6 +120,10 @@ public class AddressServiceImpl implements IAddressService {
         
         if (!existing.getUser().getId().equals(user.getId()))
             throw new ForbiddenException();
+
+        if (Boolean.TRUE.equals(addressModel.getMainAddress())) {
+            desmarcarDireccionesPrincipales(user.getId(), existing.getId());
+        }
         
         existing.setStreetName(addressModel.getStreetName());
         existing.setStreetNumber(addressModel.getStreetNumber());
