@@ -25,8 +25,8 @@ CREATE TABLE `job_titles` (
 
 CREATE TABLE `user` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `birth_date` datetime(6) NOT NULL,
-  `breakfast_time` time(6) NOT NULL,
+  `birth_date` date NOT NULL,
+  `breakfast_time` time(6) DEFAULT NULL,
   `created_at` datetime(6) NOT NULL,
   `first_surname` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
