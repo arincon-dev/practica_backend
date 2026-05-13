@@ -11,6 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "user")
@@ -30,6 +32,7 @@ public class UserEntity {
     private String password;
 
     @Column(name= "created_at", nullable=false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @Column(name= "name", nullable = false)
@@ -42,9 +45,10 @@ public class UserEntity {
     private String secondSurname;
 
     @Column(name= "birth_date", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date birthDate;
 
-    @Column(name= "breakfast_time", nullable = false)
+    @Column(name= "breakfast_time", nullable = true)
     private LocalTime breakfastTime;
 
     @ManyToOne
