@@ -4,7 +4,7 @@
 
 ### Requisitos previos
 
-- **Java 17** o superior
+- **Java 21** o superior
 - **Maven 3.6+**
 - **MySQL 8.0+** (o servidor MySQL compatible)
 
@@ -98,7 +98,7 @@ Puedes configurar las variables de entorno de varias formas en VS Code:
    ```json
    {
      "terminal.integrated.env.windows": {
-       "MYSQL_DATABASE_URL": "jdbc:mysql://localhost:3306/usuarios_db",
+       "MYSQL_DATABASE_URL": "jdbc:mysql://localhost:3306/practica_final_backend",
        "MYSQL_DATABASE_USER": "root",
        "MYSQL_DATABASE_PWD": "tu_password"
      }
