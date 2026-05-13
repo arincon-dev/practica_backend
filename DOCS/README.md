@@ -26,6 +26,8 @@ The documents focus on:
 - [Flyway migrations](flyway-migrations.md)
 - [Testing with JUnit, Mockito, and AssertJ](testing-junit-mockito-assertj.md)
 - [Java date and time types](java-date-and-time-types.md)
+- [API contract](api-contract.md)
+- [Error contract](error-contract.md)
 
 
 ## Maintenance Notes
