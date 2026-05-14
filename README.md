@@ -1,22 +1,36 @@
-# Backend Spring Boot - User Management API
+# Backend Spring Boot - API de gestión de usuarios
 
-Spring Boot backend for user and address management, with MySQL persistence and Flyway migrations.
+Backend Spring Boot para gestión de usuarios y direcciones, con persistencia MySQL y migraciones Flyway.
 
-## 1. Prerequisites
+## Este proyecto se usa junto con el frontend
+
+Este backend puede ejecutarse y probarse por Swagger, pero la aplicación completa se usa con el frontend Angular.
+
+Proyecto frontend relacionado:
+- `../../practica_frontend/README.md`
+
+Para el flujo completo de la práctica:
+1. Arranca este backend (`http://localhost:8080`).
+2. Arranca el frontend (`http://localhost:4200`).
+3. Inicia sesión en el frontend y ejecuta los flujos de usuarios.
+
+Versión en inglés: [README.en.md](README.en.md)
+
+## 1. Requisitos previos
 
 - Java 21
 - Maven 3.9+
 - MySQL 8+
 
-## 2. Environment variables
+## 2. Variables de entorno
 
-The application reads database credentials from environment variables:
+La aplicación lee las credenciales de base de datos desde variables de entorno:
 
-| Variable | Description | Example |
+| Variable | Descripción | Ejemplo |
 |---|---|---|
-| `MYSQL_DATABASE_URL` | JDBC URL | `jdbc:mysql://localhost:3306/practica_final_backend` |
-| `MYSQL_DATABASE_USER` | Database user | `root` |
-| `MYSQL_DATABASE_PWD` | Database password | `admin` |
+| `MYSQL_DATABASE_URL` | URL JDBC | `jdbc:mysql://localhost:3306/practica_final_backend` |
+| `MYSQL_DATABASE_USER` | Usuario de base de datos | `root` |
+| `MYSQL_DATABASE_PWD` | Contraseña de base de datos | `admin` |
 
 ### PowerShell
 
@@ -42,44 +56,44 @@ export MYSQL_DATABASE_USER="root"
 export MYSQL_DATABASE_PWD="admin"
 ```
 
-## 3. Start backend
+## 3. Iniciar el backend
 
-From this backend folder:
+Desde esta carpeta del backend:
 
 ```bash
 mvn spring-boot:run
 ```
 
-Alternative JAR flow:
+Flujo alternativo con JAR:
 
 ```bash
 mvn -DskipTests package
 java -jar target/usuarios-0.0.1-SNAPSHOT.jar
 ```
 
-## 4. Useful URLs
+## 4. URLs útiles
 
 - API base: `http://localhost:8080`
 - Swagger UI: `http://localhost:8080/fullstack.html`
 
-## 5. Flyway and seed data
+## 5. Flyway y datos semilla
 
-Flyway runs automatically at startup.
+Flyway se ejecuta automáticamente al arrancar.
 
-Migration scripts:
+Scripts de migración:
 - `src/main/resources/db/migration/V1__create_schema_initial_tables.sql`
 - `src/main/resources/db/migration/V2__fill_initial_schema.sql`
 - `src/main/resources/db/migration/V3__add_is_admin_to_user.sql`
 - `src/main/resources/db/migration/V4__add_unique_username.sql`
 
-Sample login credentials from seed data:
+Credenciales de ejemplo incluidas en los datos semilla:
 - `johnsmith` / `password123`
 - `emilyjohnson` / `password456`
 - `michaelbrown` / `password789`
 
-## 6. API overview
+## 6. Resumen de la API
 
-User endpoints:
+Endpoints de usuario:
 - `POST /api/v1/usuarios/iniciar-sesion`
 - `GET /api/v1/usuarios/`
 - `GET /api/v1/usuarios/{id}`
@@ -89,53 +103,53 @@ User endpoints:
 - `GET /api/v1/usuarios/generos`
 - `GET /api/v1/usuarios/puestos-de-trabajo`
 
-Address endpoints:
+Endpoints de direcciones:
 - `GET /api/v1/direcciones/usuario/{userId}`
 - `GET /api/v1/direcciones/{id}`
 - `POST /api/v1/direcciones/`
 - `PUT /api/v1/direcciones/{id}`
 - `DELETE /api/v1/direcciones/{id}`
 
-Most business endpoints require query params:
+La mayoría de los endpoints de negocio requieren estos query params:
 - `nickUsuario`
 - `nickContrasena`
 
-## 7. Build and test
+## 7. Compilación y pruebas
 
 ```bash
 mvn -DskipTests package
 mvn test
 ```
 
-## 8. Run with frontend on a new machine
+## 8. Ejecutar con el frontend en una máquina nueva
 
-Use this sequence for a clean full-stack startup:
+Usa esta secuencia para un arranque limpio del stack completo:
 
-1. Install prerequisites (Java, Maven, MySQL, Node, npm).
-2. Create MySQL schema `practica_final_backend`.
-3. Set backend DB environment variables (section 2).
-4. Start backend and confirm `http://localhost:8080/fullstack.html` is reachable.
-5. Move to frontend folder and run:
+1. Instala los requisitos previos (Java, Maven, MySQL, Node, npm).
+2. Crea el esquema MySQL `practica_final_backend`.
+3. Configura las variables de entorno de la BD del backend (sección 2).
+4. Inicia el backend y confirma que `http://localhost:8080/fullstack.html` responde.
+5. Ve a la carpeta del frontend y ejecuta:
 
 ```bash
 npm install
 npm start
 ```
 
-6. Open `http://localhost:4200/login`.
-7. Sign in with a seeded user and test create/update/delete user flows.
+6. Abre `http://localhost:4200/login`.
+7. Inicia sesión con un usuario sembrado y prueba los flujos de crear, actualizar y eliminar usuarios.
 
-## 9. Troubleshooting
+## 9. Solución de problemas
 
-### Backend cannot connect to MySQL
-- Ensure MySQL is running.
-- Verify URL, user, and password environment variables.
-- Confirm schema `practica_final_backend` exists.
+### El backend no puede conectarse a MySQL
+- Asegúrate de que MySQL esté en ejecución.
+- Verifica las variables de entorno de URL, usuario y contraseña.
+- Confirma que el esquema `practica_final_backend` exista.
 
-### Flyway migration failure
-- Check migration ordering and versions.
-- Reset inconsistent local schema state if needed.
+### Fallo de migración Flyway
+- Revisa el orden y la versión de las migraciones.
+- Si hace falta, restablece el estado inconsistente del esquema local.
 
-### Port 8080 already in use
-- Stop the conflicting process, or set a different `server.port`.
+### El puerto 8080 ya está en uso
+- Detén el proceso que entra en conflicto o configura otro `server.port`.
 
