@@ -1,0 +1,248 @@
+{
+  "info": {
+    "name": "Practica Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "nickUsuario", "value": "johnsmith" },
+    { "key": "nickContrasena", "value": "password123" },
+    { "key": "userId", "value": "1" },
+    { "key": "addressId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "iniciarSesion",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/iniciar-sesion?username={{nickUsuario}}&password={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", "iniciar-sesion"],
+              "query": [
+                { "key": "username", "value": "{{nickUsuario}}" },
+                { "key": "password", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "obtenerUsuarios",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", ""],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "obtenerUsuario",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/{{userId}}?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", "{{userId}}"],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "crearUsuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"password\": \"password123\",\n  \"name\": \"New\",\n  \"firstSurname\": \"User\",\n  \"secondSurname\": null,\n  \"birthDate\": \"1998-01-10\",\n  \"breakfastTime\": \"08:00:00\",\n  \"isAdmin\": false,\n  \"genderId\": 1,\n  \"jobTitleId\": 2\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", ""],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "actualizarUsuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"johnsmith\",\n  \"password\": \"password123\",\n  \"name\": \"John\",\n  \"firstSurname\": \"Smith\",\n  \"secondSurname\": \"Doe\",\n  \"birthDate\": \"1990-01-01\",\n  \"breakfastTime\": \"08:00:00\",\n  \"isAdmin\": true,\n  \"genderId\": 1,\n  \"jobTitleId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/{{userId}}?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", "{{userId}}"],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "eliminarUsuario",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/{{userId}}?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", "{{userId}}"],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "obtenerGeneros",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/generos?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", "generos"],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "obtenerPuestosDeTrabajo",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/usuarios/puestos-de-trabajo?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "usuarios", "puestos-de-trabajo"],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Direcciones",
+      "item": [
+        {
+          "name": "obtenerDirecciones",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/direcciones/usuario/{{userId}}?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "direcciones", "usuario", "{{userId}}"],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "obtenerDireccion",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/direcciones/{{addressId}}?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "direcciones", "{{addressId}}"],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "crearDireccion",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"streetName\": \"Calle Nueva\",\n  \"streetNumber\": 10,\n  \"mainAddress\": true,\n  \"userId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/direcciones/?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "direcciones", ""],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "actualizarDireccion",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"streetName\": \"Calle Actualizada\",\n  \"streetNumber\": 22,\n  \"mainAddress\": true,\n  \"userId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/direcciones/{{addressId}}?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "direcciones", "{{addressId}}"],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "eliminarDireccion",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/direcciones/{{addressId}}?nickUsuario={{nickUsuario}}&nickContrasena={{nickContrasena}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "direcciones", "{{addressId}}"],
+              "query": [
+                { "key": "nickUsuario", "value": "{{nickUsuario}}" },
+                { "key": "nickContrasena", "value": "{{nickContrasena}}" }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
