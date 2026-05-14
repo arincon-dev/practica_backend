@@ -49,4 +49,10 @@ This keeps controllers clean and makes behavior predictable.
 
 Prefer specific handlers first, then a generic fallback.
 Specific handlers preserve precise semantics.
-Generic fallback prevents uncaught errors from leaking internal details.
+Current implementation note:
+- generic fallback currently returns `ex.getMessage()` in the error payload.
+- this helps debugging but can expose internal details.
+
+Production hardening recommendation:
+- return a generic safe message for 500 errors,
+- log the original exception internally.

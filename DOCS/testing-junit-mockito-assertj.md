@@ -31,6 +31,11 @@ This backend has service rules like:
 
 Mockito-based unit tests validate these rules without a real database.
 
+Scope clarification:
+- these tests validate service decision logic and repository interactions.
+- they do not validate real database transaction commit/rollback behavior.
+- transaction rollback behavior should be covered with integration tests against a real persistence context.
+
 ## Common mistakes
 
 - Over-mocking trivial behavior.

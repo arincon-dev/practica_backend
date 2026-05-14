@@ -177,6 +177,11 @@ Body (`AddressRequestDTO`):
 - `mainAddress` boolean, required
 - `userId` integer, required
 
+Important behavior note:
+- in create flow, ownership is enforced by authenticated credentials.
+- service persistence binds address ownership to authenticated user context.
+- clients should send `userId` consistent with authenticated user.
+
 Response data type:
 - `AddressResponseDTO`
 
