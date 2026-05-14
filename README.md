@@ -1,345 +1,171 @@
-# Instrucciones
+# Backend Spring Boot - API de gestión de usuarios
 
-## Cómo lanzar el proyecto
+Backend Spring Boot para gestión de usuarios y direcciones, con persistencia MySQL y migraciones Flyway.
 
-### Requisitos previos
+## Este proyecto se usa junto con el frontend
 
-- **Java 21** o superior
-- **Maven 3.6+**
-- **MySQL 8.0+** (o servidor MySQL compatible)
+Este backend puede ejecutarse y probarse por Swagger, pero la aplicación completa se usa con el frontend Angular.
 
-### Configuración de variables de entorno
+Proyecto frontend relacionado:
+- https://github.com/arincon-dev/practica_frontend
 
-El proyecto requiere las siguientes variables de entorno para conectar con la base de datos MySQL:
+Para el flujo completo de la práctica:
+1. Arranca este backend (`http://localhost:8080`).
+2. Arranca el frontend (`http://localhost:4200`).
+3. Inicia sesión en el frontend y ejecuta los flujos de usuarios.
 
-| Variable              | Descripción                                      | Ejemplo                                         |
-|-----------------------|--------------------------------------------------|-------------------------------------------------|
-| `MYSQL_DATABASE_URL`  | URL de conexión JDBC a la base de datos          | `jdbc:mysql://localhost:3306/practica_final_backend` |
-| `MYSQL_DATABASE_USER` | Usuario de la base de datos                      | `root`                                               |
-| `MYSQL_DATABASE_PWD`  | Contraseña del usuario de la base de datos       | `tu_password`                                        |
+Versión en inglés: [README.en.md](README.en.md)
 
-**Windows (PowerShell):**
+## 1. Requisitos previos
+
+- Java 21
+- Maven 3.9+
+- MySQL 8+
+
+## 2. Variables de entorno
+
+La aplicación lee las credenciales de base de datos desde variables de entorno:
+
+| Variable | Descripción | Ejemplo |
+|---|---|---|
+| `MYSQL_DATABASE_URL` | URL JDBC | `jdbc:mysql://localhost:3306/practica_final_backend` |
+| `MYSQL_DATABASE_USER` | Usuario de base de datos | `root` |
+| `MYSQL_DATABASE_PWD` | Contraseña de base de datos | `admin` |
+
+### PowerShell
+
 ```powershell
 $env:MYSQL_DATABASE_URL="jdbc:mysql://localhost:3306/practica_final_backend"
 $env:MYSQL_DATABASE_USER="root"
-$env:MYSQL_DATABASE_PWD="tu_password"
+$env:MYSQL_DATABASE_PWD="admin"
 ```
 
-**Windows (CMD):**
+### CMD
+
 ```cmd
 set MYSQL_DATABASE_URL=jdbc:mysql://localhost:3306/practica_final_backend
 set MYSQL_DATABASE_USER=root
-set MYSQL_DATABASE_PWD=tu_password
+set MYSQL_DATABASE_PWD=admin
 ```
 
-**Linux/Mac:**
+### Linux/macOS
+
 ```bash
 export MYSQL_DATABASE_URL="jdbc:mysql://localhost:3306/practica_final_backend"
 export MYSQL_DATABASE_USER="root"
-export MYSQL_DATABASE_PWD="tu_password"
+export MYSQL_DATABASE_PWD="admin"
 ```
 
-**VS Code:**
+## 3. Iniciar el backend
 
-Puedes configurar las variables de entorno de varias formas en VS Code:
+Desde esta carpeta del backend:
 
-1. **Archivo `.env` en la raíz del proyecto:**
-
-   Crea un archivo `.env` en la raíz del proyecto:
-   ```env
-   MYSQL_DATABASE_URL=jdbc:mysql://localhost:3306/practica_final_backend
-   MYSQL_DATABASE_USER=root
-   MYSQL_DATABASE_PWD=tu_password
-   ```
-
-2. **Configuración en `launch.json`:**
-
-   Crea o edita el archivo `.vscode/launch.json`:
-   ```json
-   {
-     "version": "0.2.0",
-     "configurations": [
-       {
-         "type": "java",
-         "name": "UsuarioApplication",
-         "request": "launch",
-         "mainClass": "es.ediae.master.programacion.gestionusuario.UsuarioApplication",
-         "env": {
-           "MYSQL_DATABASE_URL": "jdbc:mysql://localhost:3306/practica_final_backend",
-           "MYSQL_DATABASE_USER": "root",
-           "MYSQL_DATABASE_PWD": "tu_password"
-         }
-       }
-     ]
-   }
-   ```
-
-3. **Usar `envFile` en `launch.json`:**
-
-   Referencia el archivo `.env` desde `launch.json`:
-   ```json
-   {
-     "version": "0.2.0",
-     "configurations": [
-       {
-         "type": "java",
-         "name": "UsuarioApplication",
-         "request": "launch",
-         "mainClass": "es.ediae.master.programacion.gestionusuario.UsuarioApplication",
-         "envFile": "${workspaceFolder}/.env"
-       }
-     ]
-   }
-   ```
-
-4. **Configuración en `settings.json` del workspace:**
-
-   Edita `.vscode/settings.json` para configurar el terminal integrado:
-   ```json
-   {
-     "terminal.integrated.env.windows": {
-       "MYSQL_DATABASE_URL": "jdbc:mysql://localhost:3306/practica_final_backend",
-       "MYSQL_DATABASE_USER": "root",
-       "MYSQL_DATABASE_PWD": "tu_password"
-     }
-   }
-   ```
-
-> **Nota:** Añade `.env` a tu `.gitignore` para no subir credenciales al repositorio.
-
-### Compilar el proyecto
-
-```bash
-mvn clean install
-```
-
-### Ejecutar la aplicación
-
-**Opción 1: Con Maven**
 ```bash
 mvn spring-boot:run
 ```
 
-**Opción 2: Con el JAR generado**
+Flujo alternativo con JAR:
+
 ```bash
+mvn -DskipTests package
 java -jar target/usuarios-0.0.1-SNAPSHOT.jar
 ```
 
-### Acceso a la aplicación
+## 4. URLs útiles
 
-Una vez iniciada la aplicación:
+- API base: `http://localhost:8080`
+- Swagger UI: `http://localhost:8080/fullstack.html`
 
-- **API REST:** `http://localhost:8080`
-- **Documentación Swagger UI:** `http://localhost:8080/fullstack.html`
+## 5. Flyway y datos semilla
 
-### Migraciones de base de datos
+Flyway se ejecuta automáticamente al arrancar.
 
-El proyecto utiliza **Flyway** para gestionar las migraciones de base de datos. Las migraciones se ejecutan automáticamente al iniciar la aplicación. Los scripts se encuentran en:
+Scripts de migración:
+- `src/main/resources/db/migration/V1__create_schema_initial_tables.sql`
+- `src/main/resources/db/migration/V2__fill_initial_schema.sql`
+- `src/main/resources/db/migration/V3__add_is_admin_to_user.sql`
+- `src/main/resources/db/migration/V4__add_unique_username.sql`
 
-```
-src/main/resources/db/migration/
-```
+Credenciales de ejemplo incluidas en los datos semilla:
+- `johnsmith` / `password123`
+- `emilyjohnson` / `password456`
+- `michaelbrown` / `password789`
 
----
+## 6. Resumen de la API
 
-## Cómo añadir nuevos servicios
+Endpoints de usuario:
+- `POST /api/v1/usuarios/iniciar-sesion`
+- `GET /api/v1/usuarios/`
+- `GET /api/v1/usuarios/{id}`
+- `POST /api/v1/usuarios/`
+- `PUT /api/v1/usuarios/{id}`
+- `DELETE /api/v1/usuarios/{id}`
+- `GET /api/v1/usuarios/generos`
+- `GET /api/v1/usuarios/puestos-de-trabajo`
 
-El proyecto sigue la arquitectura en capas típica de Spring Boot. Para añadir un nuevo servicio, sigue estos pasos:
+Endpoints de direcciones:
+- `GET /api/v1/direcciones/usuario/{userId}`
+- `GET /api/v1/direcciones/{id}`
+- `POST /api/v1/direcciones/`
+- `PUT /api/v1/direcciones/{id}`
+- `DELETE /api/v1/direcciones/{id}`
 
-### Estructura del proyecto
+La mayoría de los endpoints de negocio requieren estos query params:
+- `nickUsuario`
+- `nickContrasena`
 
-```
-src/main/java/es/ediae/master/programacion/gestionusuario/
-├── entity/          # Entidades JPA
-├── repository/      # Repositorios (acceso a datos)
-├── service/         # Interfaces de servicios
-│   └── impl/        # Implementaciones de servicios
-├── controller/      # Controladores REST
-├── exception/       # Excepciones personalizadas
-└── constant/        # Constantes
-```
+## 7. Compilación y pruebas
 
-### Paso 1: Crear la Entidad
-
-Crea una nueva clase en el paquete `entity`:
-
-```java
-package es.ediae.master.programacion.gestionusuario.entity;
-
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "mi_entidad")
-public class MiEntidad {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column
-    private String nombre;
-
-    // Getters y Setters
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
-}
+```bash
+mvn -DskipTests package
+mvn test
 ```
 
-### Paso 2: Crear el Repositorio
+## 8. Ejecutar con el frontend en una máquina nueva
 
-Crea una interfaz en el paquete `repository` que extienda `JpaRepository`:
+Usa esta secuencia para un arranque limpio del stack completo:
 
-```java
-package es.ediae.master.programacion.gestionusuario.repository;
+1. Instala los requisitos previos (Java, Maven, MySQL, Node, npm).
+2. Crea el esquema MySQL `practica_final_backend`.
+3. Configura las variables de entorno de la BD del backend (sección 2).
+4. Inicia el backend y confirma que `http://localhost:8080/fullstack.html` responde.
+5. Ve a la carpeta del frontend y ejecuta:
 
-import es.ediae.master.programacion.gestionusuario.entity.MiEntidad;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface MiEntidadRepository extends JpaRepository<MiEntidad, Integer> {
-    // Métodos de consulta personalizados (opcional)
-    // List<MiEntidad> findByNombre(String nombre);
-}
+```bash
+npm install
+npm start
 ```
 
-### Paso 3: Crear la Interfaz del Servicio
+6. Abre `http://localhost:4200/login`.
+7. Inicia sesión con un usuario sembrado y prueba los flujos de crear, actualizar y eliminar usuarios.
 
-Crea una interfaz en el paquete `service`:
+## 9. Solución de problemas
 
-```java
-package es.ediae.master.programacion.gestionusuario.service;
+### El backend no puede conectarse a MySQL
+- Asegúrate de que MySQL esté en ejecución.
+- Verifica las variables de entorno de URL, usuario y contraseña.
+- Confirma que el esquema `practica_final_backend` exista.
 
-import es.ediae.master.programacion.gestionusuario.entity.MiEntidad;
-import java.util.List;
+### Fallo de migración Flyway
+- Revisa el orden y la versión de las migraciones.
+- Si hace falta, restablece el estado inconsistente del esquema local.
 
-public interface IMiEntidadService {
-    List<MiEntidad> obtenerTodos();
-    MiEntidad obtenerPorId(Integer id);
-    MiEntidad guardar(MiEntidad entidad);
-    void eliminar(Integer id);
-}
-```
+### El puerto 8080 ya está en uso
+- Detén el proceso que entra en conflicto o configura otro `server.port`.
 
-### Paso 4: Implementar el Servicio
+## 10. Decisiones de arquitectura y tradeoffs
 
-Crea la implementación en el paquete `service.impl`:
+- Arquitectura por capas (controller -> service -> repository): separa contrato HTTP, reglas de negocio y persistencia.
+- Uso de excepciones tipadas + handler global: mantiene semántica HTTP consistente.
+- Contrato de respuesta uniforme (`type`, `message`, `data`) en controladores: facilita integración cliente.
+- Validación en DTO (`@Valid`) y reglas de negocio en service: reduce acoplamiento y mejora mantenibilidad.
+- Credenciales en query params por requisitos de práctica: simple de integrar para frontend local.
 
-```java
-package es.ediae.master.programacion.gestionusuario.service.impl;
+## 11. Limitaciones actuales y no objetivos
 
-import es.ediae.master.programacion.gestionusuario.entity.MiEntidad;
-import es.ediae.master.programacion.gestionusuario.repository.MiEntidadRepository;
-import es.ediae.master.programacion.gestionusuario.service.IMiEntidadService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+- No se implementa autenticación basada en token/JWT (fuera de alcance de la práctica).
+- El handler genérico actual puede exponer `ex.getMessage()` en errores 500.
+- Las pruebas principales son unitarias con Mockito; no cubren rollback real de BD end-to-end.
+- No hay versionado de contrato más allá de prefijo `/api/v1`.
+- Prioridad del proyecto: claridad didáctica y cobertura funcional CRUD sobre hardening productivo.
 
-import java.util.List;
-
-@Service
-public class MiEntidadServiceImpl implements IMiEntidadService {
-
-    @Autowired
-    private MiEntidadRepository miEntidadRepository;
-
-    @Override
-    public List<MiEntidad> obtenerTodos() {
-        return miEntidadRepository.findAll();
-    }
-
-    @Override
-    public MiEntidad obtenerPorId(Integer id) {
-        return miEntidadRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public MiEntidad guardar(MiEntidad entidad) {
-        return miEntidadRepository.save(entidad);
-    }
-
-    @Override
-    public void eliminar(Integer id) {
-        miEntidadRepository.deleteById(id);
-    }
-}
-```
-
-### Paso 5: Crear el Controlador
-
-Crea el controlador REST en el paquete `controller`:
-
-```java
-package es.ediae.master.programacion.gestionusuario.controller;
-
-import es.ediae.master.programacion.gestionusuario.entity.MiEntidad;
-import es.ediae.master.programacion.gestionusuario.service.IMiEntidadService;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-@RestController
-@RequestMapping("/mi-entidad")
-public class MiEntidadController {
-
-    private final IMiEntidadService miEntidadService;
-
-    public MiEntidadController(IMiEntidadService miEntidadService) {
-        this.miEntidadService = miEntidadService;
-    }
-
-    @GetMapping
-    public List<MiEntidad> obtenerTodos() {
-        return miEntidadService.obtenerTodos();
-    }
-
-    @GetMapping("/{id}")
-    public MiEntidad obtenerPorId(@PathVariable Integer id) {
-        return miEntidadService.obtenerPorId(id);
-    }
-
-    @PostMapping
-    public MiEntidad crear(@RequestBody MiEntidad entidad) {
-        return miEntidadService.guardar(entidad);
-    }
-
-    @PutMapping("/{id}")
-    public MiEntidad actualizar(@PathVariable Integer id, @RequestBody MiEntidad entidad) {
-        entidad.setId(id);
-        return miEntidadService.guardar(entidad);
-    }
-
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Integer id) {
-        miEntidadService.eliminar(id);
-    }
-}
-```
-
-### Paso 6: Crear la migración de base de datos
-
-Añade un nuevo script SQL en `src/main/resources/db/migration/` siguiendo la nomenclatura de Flyway:
-
-```sql
--- V3__crear_tabla_mi_entidad.sql
-CREATE TABLE mi_entidad (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255)
-);
-```
-
-> **Nota:** El nombre del archivo debe seguir el patrón `V{numero}__{descripcion}.sql` (dos guiones bajos).
-
-### Resumen de archivos a crear
-
-| Archivo | Ubicación |
-|---------|-----------|
-| `MiEntidad.java` | `entity/` |
-| `MiEntidadRepository.java` | `repository/` |
-| `IMiEntidadService.java` | `service/` |
-| `MiEntidadServiceImpl.java` | `service/impl/` |
-| `MiEntidadController.java` | `controller/` |
-| `V{n}__crear_tabla_mi_entidad.sql` | `resources/db/migration/` |
-
----

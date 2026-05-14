@@ -12,6 +12,7 @@ The documents focus on:
 
 ## Topic Index
 
+- [End-to-end flow (backend view)](end-to-end-flow.md)
 - [Map.of immutable response payloads](map-of.md)
 - [Streams and method references (::)](streams-and-method-references.md)
 - [Optional and orElseThrow](optional-and-orelsethrow.md)
