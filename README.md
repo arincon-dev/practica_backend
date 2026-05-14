@@ -153,3 +153,19 @@ npm start
 ### El puerto 8080 ya está en uso
 - Detén el proceso que entra en conflicto o configura otro `server.port`.
 
+## 10. Decisiones de arquitectura y tradeoffs
+
+- Arquitectura por capas (controller -> service -> repository): separa contrato HTTP, reglas de negocio y persistencia.
+- Uso de excepciones tipadas + handler global: mantiene semántica HTTP consistente.
+- Contrato de respuesta uniforme (`type`, `message`, `data`) en controladores: facilita integración cliente.
+- Validación en DTO (`@Valid`) y reglas de negocio en service: reduce acoplamiento y mejora mantenibilidad.
+- Credenciales en query params por requisitos de práctica: simple de integrar para frontend local.
+
+## 11. Limitaciones actuales y no objetivos
+
+- No se implementa autenticación basada en token/JWT (fuera de alcance de la práctica).
+- El handler genérico actual puede exponer `ex.getMessage()` en errores 500.
+- Las pruebas principales son unitarias con Mockito; no cubren rollback real de BD end-to-end.
+- No hay versionado de contrato más allá de prefijo `/api/v1`.
+- Prioridad del proyecto: claridad didáctica y cobertura funcional CRUD sobre hardening productivo.
+
