@@ -7,7 +7,7 @@ Spring Boot backend for user and address management, with MySQL persistence and 
 This backend can run and be tested in Swagger, but the complete application flow is meant to be used with the Angular frontend.
 
 Related frontend project:
-- `../../practica_frontend/README.en.md`
+- https://github.com/arincon-dev/practica_frontend
 
 For the full practice flow:
 1. Start this backend (`http://localhost:8080`).

@@ -7,7 +7,7 @@ Backend Spring Boot para gestión de usuarios y direcciones, con persistencia My
 Este backend puede ejecutarse y probarse por Swagger, pero la aplicación completa se usa con el frontend Angular.
 
 Proyecto frontend relacionado:
-- `../../practica_frontend/README.md`
+- https://github.com/arincon-dev/practica_frontend
 
 Para el flujo completo de la práctica:
 1. Arranca este backend (`http://localhost:8080`).
